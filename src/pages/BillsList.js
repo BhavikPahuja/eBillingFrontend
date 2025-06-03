@@ -1,56 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BillPreview from "./BillPreview";
 
-async function generateBillPdfById(billId) {
-  // 1. Fetch bill data from backend
-  const res = await fetch(`https://ebillingbackend.onrender.com/api/bills/${billId}`);
-  const bill = await res.json();
-
-  // 2. Transform data to match BillPreview's expected props
-  const total = bill.products.reduce((sum, p) => sum + Number(p.quantity) * Number(p.price), 0);
-  const billData = {
-    address: "Main Market, Mirzewala, Sri Ganganagar",
-    invoiceNo: bill.serial || bill._id,
-    date: bill.date ? new Date(bill.date).toISOString() : "",
-    companyName: bill.billerName,
-    contactNo: bill.billerNumber || 7979797979,
-    items: bill.products,
-    totalAmount: bill.totalAmount,
-    subTotal: bill.totalAmount,
-    received: bill.totalAmount,
-    balance: 0,
-    currentBalance: bill.currentBalance || 0,
-    amountInWords: total > 0 ? `${total} Rupees only` : "Zero Rupees only",
-  };
-
-  // 2. Create a hidden container
-  const container = document.createElement('div');
-  container.style.position = 'fixed';
-  container.style.left = '-9999px';
-  document.body.appendChild(container);
-
-  // 3. Render BillPreview into the container
-  const ReactDOM = await import('react-dom/client');
-  ReactDOM.createRoot(container).render(<BillPreview billData={billData} onBack={() => {}} />)
-
-  // 4. Wait for rendering
-  await new Promise(r => setTimeout(r, 700));
-
-  // 5. Generate and save PDF (no prompt)
-  const element = container.firstChild;
-  const opt = {
-    margin: 0,
-    filename: `bill_${billData.invoiceNo || billId}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-  await window.html2pdf().set(opt).from(element).save();
-
-  // 6. Clean up
-  document.body.removeChild(container);
-}
-
 export default function BillsList() {
   const [selectedBill, setSelectedBill] = useState(null);
   const [bills, setBills] = useState([]);
@@ -87,10 +37,6 @@ export default function BillsList() {
   const handleFilter = (e) => {
     e.preventDefault();
     fetchBills();
-  };
-
-  const handleDownloadPdf = async (billId) => {
-  //  generateBillPdfById(billId);
   };
 
 const handleShowBill = async (billId) => {
