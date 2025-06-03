@@ -57,7 +57,7 @@ export default function BillForm() {
     try {
       console.log("Sending data:", billDataToSend);
       
-      const response = await fetch("https://ebillingbackend.onrender.com/api/bills", {
+      const response = await fetch("http://localhost:5000/api/bills", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(billDataToSend),
