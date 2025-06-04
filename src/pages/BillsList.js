@@ -13,7 +13,7 @@ export default function BillsList() {
   const fetchBills = async () => {
     setLoading(true);
     try {
-      let url = "s://localhost:5000/api/bills";
+      let url = "https://ebillingbackend.onrender.com/api/bills";
       const params = [];
       if (from) params.push(`from=${from}`);
       if (to) params.push(`to=${to}`);
