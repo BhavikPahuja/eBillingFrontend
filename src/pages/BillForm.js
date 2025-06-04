@@ -49,7 +49,6 @@ export default function BillForm() {
 
     const billDataToSend = {
       billerName,
-      billerNumber,
       billToAddress,
       billToCity,
       date: new Date().toISOString(),
@@ -118,21 +117,6 @@ export default function BillForm() {
                 required
                 className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Enter biller name"
-              />
-            </div>
-
-            <div className="mb-8">
-              <label className="block font-semibold mb-2 text-blue-900">
-                Biller Contact Number:
-              </label>
-              <input
-                type="tel"
-                value={billerNumber}
-                onChange={(e) => setBillerNumber(e.target.value)}
-                required
-                pattern="\d{10}"
-                placeholder="Enter 10 digit number"
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
             </div>
 
@@ -230,7 +214,6 @@ export default function BillForm() {
               billTo: billerName,
               invoiceNo: invoiceNo,
               date: new Date().toLocaleDateString(),
-              contactNo: billerNumber,
               billToAddress,
               billToCity,
               products: products,
