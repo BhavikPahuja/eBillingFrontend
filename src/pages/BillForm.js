@@ -4,7 +4,6 @@ import { toWords } from 'number-to-words';
 
 export default function BillForm() {
   const [billerName, setBillerName] = useState("");
-  const [billerNumber, setBillerNumber] = useState("");
   const [billToAddress, setBillToAddress] = useState("");
   const [billToCity, setBillToCity] = useState("");
   const [products, setProducts] = useState([{ name: "", quantity: "", price: "" }]);
@@ -32,7 +31,6 @@ export default function BillForm() {
     e.preventDefault();
 
     if (!billerName.trim()) return alert("Please enter the biller name");
-    if (!billerNumber.trim()) return alert("Please enter the biller contact number");
     if (!billToAddress.trim()) return alert("Please enter the biller address");
     if (!billToCity.trim()) return alert("Please enter the biller city");
     if (products.length === 0) return alert("Please add at least one product");
