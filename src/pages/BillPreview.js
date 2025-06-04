@@ -45,11 +45,11 @@ export default function BillPreview({ billData, onBack }) {
           width: 100vw;
           min-height: 100vh;
           margin: 0;
-          padding: 20mm 10mm;
+          padding: 10mm 8mm;
           border: 1px solid #000;
           background: #fff;
           box-sizing: border-box;
-          max-height: 270mm;
+          max-height: 277mm;
           overflow: hidden;
         }
         table {
