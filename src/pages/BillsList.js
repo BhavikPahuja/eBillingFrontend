@@ -42,7 +42,7 @@ export default function BillsList() {
 
 const handleShowBill = async (billId) => {
   window.scrollTo({ top: 0, behavior: "smooth" }); // <-- Scroll to top
-  const res = await fetch(`http://localhost:5000/api/bills/${billId}`);
+  const res = await fetch(`https://ebillingbackend.onrender.com/api/bills/${billId}`);
   const bill = await res.json();
   const total = bill.products.reduce((sum, p) => sum + Number(p.quantity) * Number(p.price), 0);
   setSelectedBill({
@@ -63,7 +63,7 @@ const handleShowBill = async (billId) => {
 };
 
   const handleDownloadExcel = () => {
-    window.open("http://localhost:5000/api/bills/excel", "_blank");
+    window.open("https://ebillingbackend.onrender.com/api/bills/excel", "_blank");
   };
 
   return (
