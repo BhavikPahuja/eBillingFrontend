@@ -1,9 +1,12 @@
 import React, { useState, useRef } from "react";
 import BillPreview from "./BillPreview";
+import { toWords } from 'number-to-words';
 
 export default function BillForm() {
   const [billerName, setBillerName] = useState("");
   const [billerNumber, setBillerNumber] = useState("");
+  const [billToAddress, setBillToAddress] = useState("");
+  const [billToCity, setBillToCity] = useState("");
   const [products, setProducts] = useState([{ name: "", quantity: "", price: "" }]);
   const [showPrint, setShowPrint] = useState(false);
   const [invoiceNo, setInvoiceNo] = useState(null);
@@ -30,6 +33,8 @@ export default function BillForm() {
 
     if (!billerName.trim()) return alert("Please enter the biller name");
     if (!billerNumber.trim()) return alert("Please enter the biller contact number");
+    if (!billToAddress.trim()) return alert("Please enter the biller address");
+    if (!billToCity.trim()) return alert("Please enter the biller city");
     if (products.length === 0) return alert("Please add at least one product");
 
     for (const prod of products) {
@@ -45,6 +50,8 @@ export default function BillForm() {
     const billDataToSend = {
       billerName,
       billerNumber,
+      billToAddress,
+      billToCity,
       date: new Date().toISOString(),
       products: products.map((p) => ({
         name: p.name,
@@ -56,30 +63,29 @@ export default function BillForm() {
 
     try {
       console.log("Sending data:", billDataToSend);
-      
-      const response = await fetch("https://ebillingbackend.onrender.com/api/bills", {
+
+      const response = await fetch("http://localhost:5000/api/bills", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(billDataToSend),
       });
-      
+
       if (!response.ok) throw new Error("Failed to save bill");
-  console.log("Response received");
+      console.log("Response received");
 
-  const data = await response.json();
-  console.log("Parsed response:", data);
+      const data = await response.json();
+      console.log("Parsed response:", data);
 
-  setInvoiceNo(data.invoiceNo);
-  setShowPrint(true);
-  setTimeout(() => inputRef.current?.focus(), 100);
-} catch (error) {
-  console.error("Error:", error);
-  alert(error.message);
-} finally {
-  setLoading(false);
-}
-  }
-
+      setInvoiceNo(data.invoiceNo);
+      setShowPrint(true);
+      setTimeout(() => inputRef.current?.focus(), 100);
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const totalAmount = products.reduce(
     (sum, p) => sum + Number(p.quantity) * Number(p.price),
@@ -127,6 +133,34 @@ export default function BillForm() {
                 pattern="\d{10}"
                 placeholder="Enter 10 digit number"
                 className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block font-semibold mb-2 text-blue-900">
+                Biller Address:
+              </label>
+              <input
+                type="text"
+                value={billToAddress}
+                onChange={(e) => setBillToAddress(e.target.value)}
+                required
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                placeholder="Enter biller address"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block font-semibold mb-2 text-blue-900">
+                Biller City:
+              </label>
+              <input
+                type="text"
+                value={billToCity}
+                onChange={(e) => setBillToCity(e.target.value)}
+                required
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                placeholder="Enter biller city"
               />
             </div>
 
@@ -193,20 +227,18 @@ export default function BillForm() {
         <div className="mt-12 max-w-4xl mx-auto">
           <BillPreview
             billData={{
-              companyName: billerName,
-              address: "Main Market, Mirzewala, Sri Ganganagar",
-              forText: "T.R BALAJI 2024 - 25",
-              invoiceNo: invoiceNo || "N/A",
+              billTo: billerName,
+              invoiceNo: invoiceNo,
               date: new Date().toLocaleDateString(),
-              billTo: "Mirzewala Pahuja Telecom",
               contactNo: billerNumber,
+              billToAddress,
+              billToCity,
               products: products,
               totalAmount,
               subTotal: totalAmount,
               received: 0,
               balance: totalAmount,
-              currentBalance: 0,
-              amountInWords: totalAmount > 0 ? `${totalAmount} Rupees only` : "Zero Rupees only",
+              amountInWords: totalAmount > 0 ? `${toWords(totalAmount)} Rupees only` : "Zero Rupees only",
             }}
             onBack={() => setShowPrint(false)}
           />

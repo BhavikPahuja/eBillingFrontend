@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BillPreview from "./BillPreview";
+import { toWords } from 'number-to-words';
 
 export default function BillsList() {
   const [selectedBill, setSelectedBill] = useState(null);
@@ -12,7 +13,7 @@ export default function BillsList() {
   const fetchBills = async () => {
     setLoading(true);
     try {
-      let url = "https://ebillingbackend.onrender.com/api/bills";
+      let url = "s://localhost:5000/api/bills";
       const params = [];
       if (from) params.push(`from=${from}`);
       if (to) params.push(`to=${to}`);
@@ -41,7 +42,7 @@ export default function BillsList() {
 
 const handleShowBill = async (billId) => {
   window.scrollTo({ top: 0, behavior: "smooth" }); // <-- Scroll to top
-  const res = await fetch(`https://ebillingbackend.onrender.com/api/bills/${billId}`);
+  const res = await fetch(`http://localhost:5000/api/bills/${billId}`);
   const bill = await res.json();
   const total = bill.products.reduce((sum, p) => sum + Number(p.quantity) * Number(p.price), 0);
   setSelectedBill({
@@ -57,12 +58,12 @@ const handleShowBill = async (billId) => {
     received: bill.received ?? total,
     balance: bill.balance ?? 0,
     currentBalance: bill.currentBalance ?? 0,
-    amountInWords: total > 0 ? `${total} Rupees only` : "Zero Rupees only",
+    amountInWords: total > 0 ? `${toWords(total)} Rupees only` : "Zero Rupees only",
   });
 };
 
   const handleDownloadExcel = () => {
-    window.open("https://ebillingbackend.onrender.com/api/bills/excel", "_blank");
+    window.open("http://localhost:5000/api/bills/excel", "_blank");
   };
 
   return (
