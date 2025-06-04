@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react
 import Home from "./pages/Home";
 import BillForm from "./pages/BillForm";
 import BillsList from "./pages/BillsList";
+import InstallPWAButton from "./components/InstallPWAButton";
 
 function Navbar() {
   const location = useLocation();
@@ -29,6 +30,7 @@ function Navbar() {
           </Link>
         ))}
       </div>
+      <InstallPWAButton />
     </nav>
   );
 }
