@@ -97,6 +97,18 @@ export default function BillPreview({ billData, onBack }) {
         .border {
           border: 1px solid #000;
         }
+        .borderB {
+          border-bottom: 1px solid #000;
+        }
+        .borderT {
+          border-top: 1px solid #000;
+        }
+        .borderR {
+          border-right: 1px solid #000;
+        }
+        .borderL {
+          border-left: 1px solid #000;
+        }
       `}</style>
       <button
         onClick={onBack}
@@ -115,7 +127,7 @@ export default function BillPreview({ billData, onBack }) {
       <div className="invoice-box" ref={printRef}>
         <table>
           <tbody className='border'>
-            <tr className='border'>
+            <tr className='borderB'>
               <td colSpan={3} className=" center">
                 <strong>INVOICE</strong><br />
                 <strong>RAJASTHAN MOBILE SHOP</strong><br />
@@ -124,17 +136,17 @@ export default function BillPreview({ billData, onBack }) {
               </td>
             </tr>
             <tr>
-              <td className='border'>
+              <td className='borderR borderB'>
                 <strong>Invoice No.:</strong><br />
                 {billData.invoiceNo}
               </td>
-              <td className='border'>
+              <td className='borderB'>
                 <strong>Date:</strong><br />
                 {billData.date}
               </td>
             </tr>
             <tr>
-              <td className='border'>
+              <td className='borderR'>
                 <strong>Billed to</strong><br />
                 {billData.billTo}<br />
                 {billData.billToAddress}<br />
@@ -189,7 +201,7 @@ export default function BillPreview({ billData, onBack }) {
         <table className='border'>
           <tbody>
             <tr>
-              <td colSpan={4} className="right border"><strong>{`Grand Total :`}</strong></td>
+              <td colSpan={4} className="right borderR"><strong>{`Grand Total :`}</strong></td>
               <td><strong>₹ {billData.totalAmount?.toFixed(2) || "0.00"}</strong></td>
             </tr>
           </tbody>
@@ -204,11 +216,11 @@ export default function BillPreview({ billData, onBack }) {
         <table className='border'>
           <tbody>
             <tr>
-              <td className='border'>
+              <td className='borderR'>
                 <strong>Terms & Conditions</strong><br />
                 1. Goods once sold will not be taken back.
               </td>
-              <td className="center border">
+              <td className="center borderR">
                 <br /><br /><br />
                 Receiver's Signature
               </td>
