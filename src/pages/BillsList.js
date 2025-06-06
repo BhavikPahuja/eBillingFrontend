@@ -46,7 +46,7 @@ const handleShowBill = async (billId) => {
   const bill = await res.json();
   const total = bill.products.reduce((sum, p) => sum + Number(p.quantity) * Number(p.price), 0);
   setSelectedBill({
-    billTo: bill.billTo,
+    billTo: bill.billerName,
     invoiceNo: bill.serial,
     date: bill.date,
     billToAddress: bill.billToAddress,
