@@ -36,6 +36,11 @@ function Navbar() {
 }
 
 function App() {
+  useEffect(() => {
+    fetch("https://ebillingbackend.onrender.com/api/bills")
+      .then(() => {})
+      .catch(() => {});
+  }, []);
   return (
     <Router>
       <Navbar />
