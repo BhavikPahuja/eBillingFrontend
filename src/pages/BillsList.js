@@ -46,12 +46,11 @@ const handleShowBill = async (billId) => {
   const bill = await res.json();
   const total = bill.products.reduce((sum, p) => sum + Number(p.quantity) * Number(p.price), 0);
   setSelectedBill({
-    companyName: bill.billerName,
     billTo: bill.billTo || bill.billerName,
-    contactNo: bill.billerNumber || 7979797979,
     invoiceNo: bill.serial || bill._id,
     date: bill.date ? new Date(bill.date).toLocaleDateString() : "",
-    address: bill.address || "Main Market, Mirzewala, Sri Ganganagar",
+    billToAddress: billToAddress,
+    billToCity:billToCity,
     products: bill.products || [],
     totalAmount: total,
     subTotal: total,
@@ -78,8 +77,7 @@ const handleShowBill = async (billId) => {
       <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-4xl">
         <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">All Bills</h2>
         
-        {/* Date Filter */}
-        <form className="flex gap-4 mb-6 justify-center" onSubmit={handleFilter}>
+        <form className="flex flex-col md:flex-row gap-4 mb-6 justify-center" onSubmit={handleFilter}>
           <div>
             <label className="block text-sm text-gray-600 mb-1">From</label>
             <input
