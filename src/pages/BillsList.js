@@ -33,9 +33,6 @@ export default function BillsList() {
     }
     setLoading(false);
   };
-  useEffect(() => {
-    fetchBills();
-  }, []);
   const handleFilter = (e) => {
     e.preventDefault();
     fetchBills();
