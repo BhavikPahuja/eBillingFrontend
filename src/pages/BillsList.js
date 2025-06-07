@@ -48,7 +48,7 @@ const handleShowBill = async (billId) => {
   setSelectedBill({
     billTo: bill.billerName,
     invoiceNo: bill.serial,
-    date: bill.date,
+    date: bill.date.toLocaleDateString(),
     billToAddress: bill.billToAddress,
     billToCity: bill.billToCity,
     products: bill.products,
