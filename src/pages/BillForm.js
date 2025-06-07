@@ -10,6 +10,7 @@ export default function BillForm() {
   const [showPrint, setShowPrint] = useState(false);
   const [invoiceNo, setInvoiceNo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [billDate, setBillDate] = useState("");
   const inputRef = useRef(null);
 
   const handleAddProduct = () => {
@@ -84,6 +85,14 @@ export default function BillForm() {
     }
   };
 
+  function formatDate(dateString) {
+    const d = new Date(dateString);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = String(d.getFullYear()).slice(-2);
+    return `${day}-${month}-${year}`;
+  }
+
   const totalAmount = products.reduce(
     (sum, p) => sum + Number(p.quantity) * Number(p.price),
     0
@@ -143,6 +152,20 @@ export default function BillForm() {
                 required
                 className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Enter biller city"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block font-semibold mb-2 text-blue-900">
+                Bill Date:
+              </label>
+              <input
+                type="date"
+                value={billDate}
+                onChange={e => setBillDate(e.target.value)}
+                required
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                placeholder="Select bill date"
               />
             </div>
 
@@ -211,7 +234,7 @@ export default function BillForm() {
             billData={{
               billTo: billerName,
               invoiceNo: invoiceNo,
-              date: new Date().toLocaleDateString(),
+              date:  formatDate(billDate) ? new Date(billDate).toLocaleDateString("en-GB") : new Date().toLocaleDateString("en-GB"),
               billToAddress,
               billToCity,
               products: products,
