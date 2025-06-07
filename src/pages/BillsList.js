@@ -84,7 +84,7 @@ const handleShowBill = async (billId) => {
               type="date"
               value={from}
               onChange={e => setFrom(e.target.value)}
-              className="border rounded px-2 py-1"
+              className="border rounded px-2 py-1 w-full"
             />
           </div>
           <div>
@@ -93,12 +93,12 @@ const handleShowBill = async (billId) => {
               type="date"
               value={to}
               onChange={e => setTo(e.target.value)}
-              className="border rounded px-2 py-1"
+              className="border rounded px-2 py-1 w-full"
             />
           </div>
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition self-end"
+            className="bg-blue-600 w-full lg:w-auto mt-7 lg:mt-0 lg:mb-0 mb-1 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition self-end"
           >
             Filter
           </button>

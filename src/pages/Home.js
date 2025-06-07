@@ -9,7 +9,7 @@ export default function Home() {
         <p className="text-lg text-gray-600 mb-8">
           Create, manage, and download your bills with a modern, user-friendly interface.
         </p>
-        <div className="flex justify-center gap-6">
+        <div className="flex flex-col justify-center gap-6">
           <Link to="/new-bill" className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-xl font-semibold shadow transition">
             Create New Bill
           </Link>

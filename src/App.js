@@ -14,14 +14,14 @@ function Navbar() {
     { to: "/bills", label: "All Bills" },
   ];
   return (
-    <nav className="bg-gradient-to-r from-blue-700 to-indigo-900 shadow-lg py-4 px-8 flex items-center justify-between">
-      <div className="text-2xl font-extrabold text-white tracking-wide">e-Billing</div>
+    <nav className="bg-gradient-to-r from-blue-700 to-indigo-900 shadow-lg py-2 lg:p-4 px-8 flex flex-col lg:flex-row items-center justify-between">
+      <div className="lg:text-2xl text-lg font-extrabold text-white tracking-wide mb-3 mt-2">e-Billing</div>
       <div className="flex gap-6">
         {navLinks.map(link => (
           <Link
             key={link.to}
             to={link.to}
-            className={`text-lg font-medium px-3 py-1 rounded transition ${
+            className={`lg:text-lg text-md font-medium p-[5px] mb-4 lg:p-2 rounded transition ${
               location.pathname === link.to
                 ? "bg-white text-blue-700 shadow"
                 : "text-white hover:bg-blue-600 hover:text-white"
