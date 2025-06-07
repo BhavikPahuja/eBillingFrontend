@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BillPreview from "./BillPreview";
 import { toWords } from 'number-to-words';
 
 export default function BillsList() {
+  useEffect(() => {
+    fetchBills();
+    // eslint-disable-next-line
+  }, []);
   const [selectedBill, setSelectedBill] = useState(null);
   const [bills, setBills] = useState([]);
   const [from, setFrom] = useState("");
@@ -34,7 +38,7 @@ export default function BillsList() {
     setLoading(false);
   };
   const handleFilter = (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     fetchBills();
   };
 const handleShowBill = async (billId) => {
