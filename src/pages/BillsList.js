@@ -8,8 +8,13 @@ export default function BillsList() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Fetch bills from backend with optional date filter
+  function formatDate(dateString) {
+  const d = new Date(dateString);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = String(d.getFullYear()).slice(-2);
+  return `${day}-${month}-${year}`;
+}
   const fetchBills = async () => {
     setLoading(true);
     try {
@@ -28,18 +33,13 @@ export default function BillsList() {
     }
     setLoading(false);
   };
-
   useEffect(() => {
     fetchBills();
-    // eslint-disable-next-line
   }, []);
-
-  // Handle filter submit
   const handleFilter = (e) => {
     e.preventDefault();
     fetchBills();
   };
-
 const handleShowBill = async (billId) => {
   window.scrollTo({ top: 0, behavior: "smooth" }); // <-- Scroll to top
   const res = await fetch(`https://ebillingbackend.onrender.com/api/bills/${billId}`);
@@ -48,7 +48,7 @@ const handleShowBill = async (billId) => {
   setSelectedBill({
     billTo: bill.billerName,
     invoiceNo: bill.serial,
-    date: bill.date.toLocaleDateString(),
+    date: formatDate(bill.date),
     billToAddress: bill.billToAddress,
     billToCity: bill.billToCity,
     products: bill.products,
