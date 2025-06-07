@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import BillForm from "./pages/BillForm";
 import BillsList from "./pages/BillsList";
 import InstallPWAButton from "./components/InstallPWAButton";
+import { useEffect } from "react";
 
 function Navbar() {
   const location = useLocation();
