@@ -12,13 +12,22 @@ export default function BillsList() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [loading, setLoading] = useState(false);
+
   function formatDate(dateString) {
+    // Handle YYYY-MM-DD format from date input to avoid timezone issues
+    if (typeof dateString === "string" && dateString.includes("-")) {
+      const parts = dateString.split("T")[0]; // Remove time part if exists
+      const [year, month, day] = parts.split("-");
+      return `${day}-${month}-${year.slice(-2)}`;
+    }
+    // Handle Date object or other formats
     const d = new Date(dateString);
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const year = String(d.getFullYear()).slice(-2);
     return `${day}-${month}-${year}`;
   }
+
   const fetchBills = async () => {
     setLoading(true);
     try {

@@ -37,50 +37,69 @@ export default function BillPreview({ billData, onBack }) {
   const shopDetails = getShopDetails(billData.shopName);
 
   return (
-    <div style={{ padding: 20 }}>
+    <>
       <style>{`
         @media print {
+          @page {
+            margin: 0;
+            size: A4;
+          }
+          
           html, body {
             width: 210mm;
             height: 297mm;
             overflow: hidden !important;
             margin: 0 !important;
             padding: 0 !important;
+            background: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
-          .invoice-box, .invoice-box * {
-            visibility: visible !important;
+          
+          /* Hide navigation, header, footer, and all page elements */
+          nav, header, footer, .no-print {
+            display: none !important;
           }
+          
+          /* Make invoice box fill entire page */
           .invoice-box {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100vw;
-            min-height: 100vh;
-            max-width: none;
-            box-sizing: border-box;
-            max-height: 270mm;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100vh !important;
+            align-items: stretch !important;
+            justify-content: space-between !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 10mm 8mm !important;
+            box-sizing: border-box !important;
+            border: none !important;
+            background: white !important;
             overflow: hidden !important;
             page-break-after: avoid !important;
             page-break-before: avoid !important;
             page-break-inside: avoid !important;
           }
-          body * { visibility: hidden !important; }
-          button, .no-print { display: none !important; }
         }
+        
+        @media screen {
+          .invoice-box {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10mm 8mm;
+            border: 1px solid #000;
+            background: #fff;
+            box-sizing: border-box;
+          }
+        }
+        
         body {
           font-family: Arial, sans-serif;
           font-size: 14px;
-        }
-        .invoice-box {
-          width: 100vw;
-          min-height: 100vh;
-          margin: 0;
-          padding: 10mm 8mm;
-          border: 1px solid #000;
-          background: #fff;
-          box-sizing: border-box;
-          max-height: 277mm;
-          overflow: hidden;
         }
         table {
           width: 100%;
@@ -140,20 +159,22 @@ export default function BillPreview({ billData, onBack }) {
           border-left: 1px solid #000;
         }
       `}</style>
-      <button
-        onClick={onBack}
-        style={{ marginBottom: 10 }}
-        className="text-red-600 hover:text-red-800 font-semibold px-4 py-2 border border-red-600 rounded-xl transition no-print"
-      >
-        Back to Form
-      </button>
-      <button
-        onClick={() => window.print()}
-        style={{ marginLeft: 10, marginBottom: 10 }}
-        className="text-red-600 hover:text-red-800 font-semibold px-4 py-2 border border-red-600 rounded-xl transition no-print"
-      >
-        Print Bill
-      </button>
+      <div className="no-print" style={{ padding: 20 }}>
+        <button
+          onClick={onBack}
+          style={{ marginBottom: 10 }}
+          className="text-red-600 hover:text-red-800 font-semibold px-4 py-2 border border-red-600 rounded-xl transition"
+        >
+          Back to Form
+        </button>
+        <button
+          onClick={() => window.print()}
+          style={{ marginLeft: 10, marginBottom: 10 }}
+          className="text-red-600 hover:text-red-800 font-semibold px-4 py-2 border border-red-600 rounded-xl transition"
+        >
+          Print Bill
+        </button>
+      </div>
       <div className="invoice-box" ref={printRef}>
         <table>
           <tbody className="border">
@@ -289,6 +310,6 @@ export default function BillPreview({ billData, onBack }) {
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 }
