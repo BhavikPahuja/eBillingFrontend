@@ -1,12 +1,15 @@
 import React, { useState, useRef } from "react";
 import BillPreview from "./BillPreview";
-import { toWords } from 'number-to-words';
+import { toWords } from "number-to-words";
 
 export default function BillForm() {
+  const [shopName, setShopName] = useState("Rajasthan Mobile Shop");
   const [billerName, setBillerName] = useState("");
   const [billToAddress, setBillToAddress] = useState("");
   const [billToCity, setBillToCity] = useState("");
-  const [products, setProducts] = useState([{ name: "", quantity: "", price: "" }]);
+  const [products, setProducts] = useState([
+    { name: "", quantity: "", price: "" },
+  ]);
   const [showPrint, setShowPrint] = useState(false);
   const [invoiceNo, setInvoiceNo] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -31,9 +34,11 @@ export default function BillForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!shopName.trim()) return alert("Please select a shop name");
     if (!billerName.trim()) return alert("Please enter the biller name");
     if (!billToAddress.trim()) return alert("Please enter the biller address");
     if (!billToCity.trim()) return alert("Please enter the biller city");
+    if (!billDate.trim()) return alert("Please select a bill date");
     if (products.length === 0) return alert("Please add at least one product");
 
     for (const prod of products) {
@@ -47,26 +52,35 @@ export default function BillForm() {
     setLoading(true);
 
     const billDataToSend = {
+      shopName,
       billerName,
       billToAddress,
       billToCity,
-      date: new Date().toISOString(),
+      date: billDate
+        ? new Date(billDate).toISOString()
+        : new Date().toISOString(),
       products: products.map((p) => ({
         name: p.name,
         quantity: Number(p.quantity),
         price: Number(p.price),
       })),
-      totalAmount: products.reduce((sum, p) => sum + Number(p.quantity) * Number(p.price), 0),
+      totalAmount: products.reduce(
+        (sum, p) => sum + Number(p.quantity) * Number(p.price),
+        0
+      ),
     };
 
     try {
       console.log("Sending data:", billDataToSend);
 
-      const response = await fetch("https://ebillingbackend.onrender.com/api/bills", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(billDataToSend),
-      });
+      const response = await fetch(
+        "https://ebillingbackend.onrender.com/api/bills",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(billDataToSend),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to save bill");
       console.log("Response received");
@@ -111,6 +125,23 @@ export default function BillForm() {
             <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">
               Bill Creator
             </h2>
+
+            <div className="mb-6">
+              <label className="block font-semibold mb-2 text-blue-900">
+                Shop Name:
+              </label>
+              <select
+                value={shopName}
+                onChange={(e) => setShopName(e.target.value)}
+                required
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              >
+                <option value="Rajasthan Mobile Shop">
+                  Rajasthan Mobile Shop
+                </option>
+                <option value="Pahuja Mobile Shop">Pahuja Mobile Shop</option>
+              </select>
+            </div>
 
             <div className="mb-6">
               <label className="block font-semibold mb-2 text-blue-900">
@@ -162,22 +193,29 @@ export default function BillForm() {
               <input
                 type="date"
                 value={billDate}
-                onChange={e => setBillDate(e.target.value)}
+                onChange={(e) => setBillDate(e.target.value)}
                 required
                 className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder="Select bill date"
               />
             </div>
 
-            <h3 className="text-2xl font-semibold mb-6 text-blue-800">Products</h3>
+            <h3 className="text-2xl font-semibold mb-6 text-blue-800">
+              Products
+            </h3>
 
             {products.map((prod, index) => (
-              <div key={index} className="flex flex-wrap items-center gap-4 mb-6">
+              <div
+                key={index}
+                className="flex flex-wrap items-center gap-4 mb-6"
+              >
                 <input
                   type="text"
                   placeholder="Product Name"
                   value={prod.name}
-                  onChange={(e) => handleProductChange(index, "name", e.target.value)}
+                  onChange={(e) =>
+                    handleProductChange(index, "name", e.target.value)
+                  }
                   required
                   className="flex-grow min-w-[180px] border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
@@ -186,7 +224,9 @@ export default function BillForm() {
                   placeholder="Quantity"
                   min="1"
                   value={prod.quantity}
-                  onChange={(e) => handleProductChange(index, "quantity", e.target.value)}
+                  onChange={(e) =>
+                    handleProductChange(index, "quantity", e.target.value)
+                  }
                   required
                   className="w-28 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
@@ -196,7 +236,9 @@ export default function BillForm() {
                   min="0.01"
                   step="0.01"
                   value={prod.price}
-                  onChange={(e) => handleProductChange(index, "price", e.target.value)}
+                  onChange={(e) =>
+                    handleProductChange(index, "price", e.target.value)
+                  }
                   required
                   className="w-36 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
@@ -232,9 +274,10 @@ export default function BillForm() {
         <div className="mt-12 max-w-4xl mx-auto">
           <BillPreview
             billData={{
+              shopName: shopName,
               billTo: billerName,
               invoiceNo: invoiceNo,
-              date:  formatDate(billDate) ? new Date(billDate).toLocaleDateString("en-GB") : new Date().toLocaleDateString("en-GB"),
+              date: billDate ? formatDate(billDate) : formatDate(new Date()),
               billToAddress,
               billToCity,
               products: products,
@@ -242,7 +285,10 @@ export default function BillForm() {
               subTotal: totalAmount,
               received: 0,
               balance: totalAmount,
-              amountInWords: totalAmount > 0 ? `${toWords(totalAmount)} Rupees only` : "Zero Rupees only",
+              amountInWords:
+                totalAmount > 0
+                  ? `${toWords(totalAmount)} Rupees only`
+                  : "Zero Rupees only",
             }}
             onBack={() => setShowPrint(false)}
           />

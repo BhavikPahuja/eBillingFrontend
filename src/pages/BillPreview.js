@@ -1,10 +1,40 @@
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
 
 export default function BillPreview({ billData, onBack }) {
   const printRef = useRef();
-  const amountInWords = billData.amountInWords || "Rupees " + (billData.totalAmount || 0) + " Only";
-  // Only show up to 6 items to ensure it fits on one page
-  const items = (billData.items || billData.products || []).slice(0, 6);
+
+  if (!billData) return null;
+
+  const amountInWords =
+    billData.amountInWords || "Rupees " + (billData.totalAmount || 0) + " Only";
+  // Only show up to 8 items to ensure it fits on one page
+  const items = (billData.items || billData.products || []).slice(0, 8);
+
+  // Shop details based on selected shop
+  const getShopDetails = (shopName) => {
+    switch (shopName) {
+      case "Rajasthan Mobile Shop":
+        return {
+          name: "RAJASTHAN MOBILE SHOP",
+          address: "MAIN MARKET, MIRZEWALA",
+          city: "SRI GANGANAGAR, 335038",
+        };
+      case "Pahuja Mobile Shop":
+        return {
+          name: "PAHUJA MOBILE SHOP",
+          address: "MAIN MARKET, MIRZEWALA",
+          city: "SRI GANGANAGAR, 335038",
+        };
+      default:
+        return {
+          name: "RAJASTHAN MOBILE SHOP",
+          address: "MAIN MARKET, MIRZEWALA",
+          city: "SRI GANGANAGAR, 335038",
+        };
+    }
+  };
+
+  const shopDetails = getShopDetails(billData.shopName);
 
   return (
     <div style={{ padding: 20 }}>
@@ -126,36 +156,47 @@ export default function BillPreview({ billData, onBack }) {
       </button>
       <div className="invoice-box" ref={printRef}>
         <table>
-          <tbody className='border'>
-            <tr className='borderB'>
+          <tbody className="border">
+            <tr className="borderB">
               <td colSpan={3} className=" center">
-                <strong>INVOICE</strong><br />
-                <strong>RAJASTHAN MOBILE SHOP</strong><br />
-                MAIN MARKET, MIRZEWALA<br />
-                SRI GANGANAGAR, 335038
+                <strong>INVOICE</strong>
+                <br />
+                <strong>{shopDetails.name}</strong>
+                <br />
+                {shopDetails.address}
+                <br />
+                {shopDetails.city}
               </td>
             </tr>
             <tr>
-              <td className='borderR borderB'>
-                <strong>Invoice No.:</strong><br />
+              <td className="borderR borderB">
+                <strong>Invoice No.:</strong>
+                <br />
                 {billData.invoiceNo}
               </td>
-              <td className='borderB'>
-                <strong>Date:</strong><br />
+              <td className="borderB">
+                <strong>Date:</strong>
+                <br />
                 {billData.date}
               </td>
             </tr>
             <tr>
-              <td className='borderR'>
-                <strong>Billed to</strong><br />
-                {billData.billTo}<br />
-                {billData.billToAddress}<br />
+              <td className="borderR">
+                <strong>Billed to</strong>
+                <br />
+                {billData.billTo}
+                <br />
+                {billData.billToAddress}
+                <br />
                 {billData.billToCity}
               </td>
               <td>
-                <strong>Shipped to</strong><br />
-                {billData.shipTo || billData.billTo}<br />
-                {billData.shipToAddress || billData.billToAddress}<br />
+                <strong>Shipped to</strong>
+                <br />
+                {billData.shipTo || billData.billTo}
+                <br />
+                {billData.shipToAddress || billData.billToAddress}
+                <br />
                 {billData.shipToCity || billData.billToCity}
               </td>
             </tr>
@@ -179,53 +220,69 @@ export default function BillPreview({ billData, onBack }) {
               <tr key={idx}>
                 <td>{idx + 1}</td>
                 <td>{item.name}</td>
-                <td>{item.quantity} {item.unit || "Pcs."}</td>
+                <td>
+                  {item.quantity} {item.unit || "Pcs."}
+                </td>
                 <td>{Number(item.price).toFixed(2)}</td>
                 <td>{(item.quantity * item.price).toFixed(2)}</td>
               </tr>
             ))}
-            {Array.from({ length: Math.max(8 - items.length, 0) }).map((_, i) => (
-              <tr key={`empty-${i}`}>
-                <td>&nbsp;</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            ))}
+            {Array.from({ length: Math.max(8 - items.length, 0) }).map(
+              (_, i) => (
+                <tr key={`empty-${i}`}>
+                  <td>&nbsp;</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
 
         <br />
 
-        <table className='border'>
+        <table className="border">
           <tbody>
             <tr>
-              <td colSpan={4} className="right borderR"><strong>{`Grand Total :`}</strong></td>
-              <td><strong>₹ {billData.totalAmount?.toFixed(2) || "0.00"}</strong></td>
+              <td colSpan={4} className="right borderR">
+                <strong>{`Grand Total :`}</strong>
+              </td>
+              <td>
+                <strong>₹ {billData.totalAmount?.toFixed(2) || "0.00"}</strong>
+              </td>
             </tr>
           </tbody>
         </table>
 
         <br />
 
-        <p><strong>{amountInWords.charAt(0).toUpperCase() + amountInWords.slice(1)}</strong></p>
+        <p>
+          <strong>
+            {amountInWords.charAt(0).toUpperCase() + amountInWords.slice(1)}
+          </strong>
+        </p>
 
         <br />
 
-        <table className='border'>
+        <table className="border">
           <tbody>
             <tr>
-              <td className='borderR'>
-                <strong>Terms & Conditions</strong><br />
+              <td className="borderR">
+                <strong>Terms & Conditions</strong>
+                <br />
                 1. Goods once sold will not be taken back.
               </td>
               <td className="center borderR">
-                <br /><br /><br />
+                <br />
+                <br />
+                <br />
                 Receiver's Signature
               </td>
               <td className="center">
-                <br /> <br /><br />
+                <br /> <br />
+                <br />
                 Authorised Signatory
               </td>
             </tr>

@@ -5,6 +5,7 @@ import BillForm from "./pages/BillForm";
 import BillsList from "./pages/BillsList";
 import InstallPWAButton from "./components/InstallPWAButton";
 import { useEffect } from "react";
+import "./App.css"
 
 function Navbar() {
   const location = useLocation();
