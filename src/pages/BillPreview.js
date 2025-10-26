@@ -93,7 +93,7 @@ export default function BillPreview({ billData, onBack }) {
         
         body {
           font-family: Arial, sans-serif;
-          font-size: 14px;
+          font-size: 24px;
         }
         table {
           width: 100%;
@@ -242,7 +242,7 @@ export default function BillPreview({ billData, onBack }) {
                 <td>{(item.quantity * item.price).toFixed(2)}</td>
               </tr>
             ))}
-            {Array.from({ length: Math.max(18 - items.length, 0) }).map(
+            {Array.from({ length: Math.max(11 - items.length, 0) }).map(
               (_, i) => (
                 <tr key={`empty-${i}`}>
                   <td>&nbsp;</td>
