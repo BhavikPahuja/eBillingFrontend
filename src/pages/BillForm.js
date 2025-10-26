@@ -116,7 +116,11 @@ export default function BillForm() {
     <>
       {!showPrint ? (
         loading ? (
-          <div className="loader">Loading...</div>
+          <div className="flex justify-center items-center h-[60vh]">
+            <p className="text-2xl font-semibold text-blue-800">
+              Loading<span className="loading-dots"></span>
+            </p>
+          </div>
         ) : (
           <form
             onSubmit={handleSubmit}

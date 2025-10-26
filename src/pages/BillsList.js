@@ -135,11 +135,10 @@ export default function BillsList() {
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td
-                        colSpan={6}
-                        className="text-center p-6 text-gray-400 flex justify-center w-full"
-                      >
-                        <div className="loader"></div>
+                      <td colSpan={6} className="text-center p-6 text-blue-800">
+                        <p className="text-xl font-semibold">
+                          Loading<span className="loading-dots"></span>
+                        </p>
                       </td>
                     </tr>
                   ) : bills.length === 0 ? (
