@@ -67,12 +67,6 @@ export default function BillPreview({ billData, onBack }) {
             left: 0 !important;
             top: 0 !important;
             right: 0 !important;
-            bottom: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            height: 100vh !important;
-            align-items: stretch !important;
-            justify-content: space-between !important;
             max-width: none !important;
             margin: 0 !important;
             padding: 10mm 8mm !important;
@@ -175,7 +169,7 @@ export default function BillPreview({ billData, onBack }) {
           Print Bill
         </button>
       </div>
-      <div className="invoice-box" ref={printRef}>
+      <div className="invoice-box border" ref={printRef}>
         <table>
           <tbody className="border">
             <tr className="borderB">
@@ -248,7 +242,7 @@ export default function BillPreview({ billData, onBack }) {
                 <td>{(item.quantity * item.price).toFixed(2)}</td>
               </tr>
             ))}
-            {Array.from({ length: Math.max(8 - items.length, 0) }).map(
+            {Array.from({ length: Math.max(18 - items.length, 0) }).map(
               (_, i) => (
                 <tr key={`empty-${i}`}>
                   <td>&nbsp;</td>
